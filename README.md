@@ -4,4 +4,8 @@
 
 Repositorio del curso de herramientas de análisis
 
-Aquí se verán herramientas como SQL y Python para el análisis de datos
+Aquí se verán herramientas como GIT, SQL y Python para el análisis de datos
+
+### GIT
+
+Dentro de GIT veremos como crear un repositorio, como modificar un archivo y como crear una rama
