@@ -241,4 +241,107 @@ SELECT * FROM COMPRAS;
 SELECT *
 FROM CLIENTES AS CLI
 INNER JOIN COMPRAS AS COM ON CLI.ID = COM.CLIENTE_ID
-WHERE CLI.PAIS = 'Chile'
+WHERE CLI.PAIS = 'Chile';
+
+-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%  Clase 3 de SQL   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+USE jarvis;
+
+-- INNER JOIN
+SELECT *
+FROM PRODUCTOS AS PRO
+INNER JOIN TIPO_PRODUCTO AS TPR ON PRO.TIPO_PRODUCTO_ID = TPR.ID;
+
+-- ¿Cuantos clientes repetidos tengo?
+-- R:
+SELECT *
+FROM (SELECT NOMBRE, COUNT(*) as CONTEO
+FROM CLIENTES
+group by NOMBRE) C
+WHERE C.CONTEO > 1;
+
+-- Contando clientes
+SELECT COUNT(*)
+FROM CLIENTES;
+
+-- Contando clientes únicos
+SELECT COUNT(DISTINCT(NOMBRE))
+FROM CLIENTES;
+
+-- LEFT JOIN
+SELECT *
+FROM CLIENTES CLI
+LEFT JOIN COMPRAS COM ON CLI.ID = COM.CLIENTE_ID
+WHERE COM.ID IS NULL;
+
+-- FULL OUTER JOIN
+SELECT *
+FROM CLIENTES CLI
+LEFT JOIN COMPRAS C on CLI.ID = C.CLIENTE_ID
+LEFT JOIN DETALLE_COMPRA D on C.ID = D.COMPRA_ID
+LEFT JOIN PRODUCTOS P2 on D.PRODUCTO_ID = P2.ID
+UNION ALL
+SELECT *
+FROM CLIENTES
+INNER JOIN COMPRAS C2 on CLIENTES.ID = C2.CLIENTE_ID
+INNER JOIN DETALLE_COMPRA DC on C2.ID = DC.COMPRA_ID
+RIGHT JOIN PRODUCTOS P on P.ID = DC.PRODUCTO_ID;
+
+
+
+
+
+-- DIFERENCE OF FULL OUTER JOIN
+SELECT *
+FROM CLIENTES CLI
+LEFT JOIN COMPRAS C on CLI.ID = C.CLIENTE_ID
+LEFT JOIN DETALLE_COMPRA D on C.ID = D.COMPRA_ID
+LEFT JOIN PRODUCTOS P2 on D.PRODUCTO_ID = P2.ID
+WHERE C.ID IS NULL
+UNION ALL
+SELECT *
+FROM CLIENTES
+INNER JOIN COMPRAS C2 on CLIENTES.ID = C2.CLIENTE_ID
+INNER JOIN DETALLE_COMPRA DC on C2.ID = DC.COMPRA_ID
+RIGHT JOIN PRODUCTOS P on P.ID = DC.PRODUCTO_ID
+WHERE C2.ID IS NULL;
+
+
+-- GROUP BY
+SELECT COUNT(*) AS 'Q_PAISES', PAIS
+FROM CLIENTES
+GROUP BY PAIS
+ORDER BY Q_PAISES DESC;
+
+SELECT * FROM CLIENTES;
+
+
+-- Crear tabla desde una query
+CREATE TABLE jarvis.AFDTMP
+AS (
+    SELECT COUNT(*) AS 'Q_PAISES', PAIS
+    FROM CLIENTES
+    GROUP BY PAIS
+    ORDER BY Q_PAISES DESC
+);
+
+-- consultando tabla
+select * from AFDTMP;
+
+-- Eliminando tabla
+drop table AFDTMP;
+
+
+-- Creando una vista
+CREATE VIEW VIEW_CLIENTES
+AS SELECT *
+FROM CLIENTES
+WHERE PAIS LIKE 'C%';
+
+-- consultando la vista
+select * from VIEW_CLIENTES;
+
+-- eliminando la vista
+drop view VIEW_CLIENTES;
